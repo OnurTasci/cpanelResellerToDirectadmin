@@ -1,0 +1,56 @@
+#!/usr/local/bin/php -n
+<?php
+require_once dirname(__DIR__).'/includes/helper.php';
+
+$_GET = Helper::parseGET();
+$_POST = Helper::parsePOST();
+
+$action = 'home';
+if (!empty($_GET) && isset($_GET['action'])) {
+    $action = $_GET['action'];
+}
+
+
+$REQUEST_URI = getenv('REQUEST_URI');
+$SERVER_NAME = getenv('SERVER_NAME');
+$SERVER_PORT = getenv('SERVER_PORT');
+$SESSION_SELECTED_DOMAIN = getenv('SESSION_SELECTED_DOMAIN');
+$SSL = getenv('SSL');
+$DIR = __DIR__;
+$PROTOCOL = 'http';
+if($SSL == 1){ $PROTOCOL = 'https'; }
+
+if (!empty($_GET) && !empty($_POST) && isset($_GET['actionPost'])) {
+    $actionPost = $_GET['actionPost'];
+
+    echo '<div id="cpanelMigratorJson">';
+    if(file_exists($DIR.'/post/'.$actionPost.'.php')){
+        include($DIR.'/post/'.$actionPost.'.php');
+    }else{
+        include($DIR.'/post/404.php');
+    }
+    echo '</div>';
+    exit;
+
+}
+
+
+include dirname($DIR).'/includes/header.php';
+?>
+<title>cPanel to DirectAdmin Migrator</title>
+<div id="cPanelMigratorApp">
+    <div class="container-fluid">
+        <div id="action" class="row">
+            <?php
+            if(file_exists($DIR.'/actions/'.$action.'.php')){
+                include($DIR.'/actions/'.$action.'.php');
+            }else{
+             include($DIR.'/actions/404.php');
+            }
+            ?>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,6 @@
+{
+    "require": {
+        "gufy/cpanel-php": "^2.0",
+        "symfony/process": "^5.0"
+    }
+}
